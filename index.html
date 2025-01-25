@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CropConnect - Login & Register</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f4f9;
+      margin: 0;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 400px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"], input[type="email"], input[type="password"], input[type="tel"], select {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #4CAF50;
+      color: #fff;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .toggle-link {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .toggle-link a {
+      color: #1E88E5;
+      text-decoration: none;
+    }
+
+    .toggle-link a:hover {
+      text-decoration: underline;
+    }
+
+    .form-container {
+      display: none;
+    }
+
+    .form-container.active {
+      display: block;
+    }
+
+    .required::after {
+      content: " *";
+      color: red;
+    }
+
+    .farmer-fields {
+      display: none;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>CropConnect</h2>
+    
+    <!-- Login Form -->
+    <div id="login-form" class="form-container active">
+      <form>
+        <input type="tel" id="login-phone" placeholder="Enter your phone number" required><br>
+        <input type="password" id="login-password" placeholder="Enter your password" required><br>
+        <button type="submit" onclick="handleLogin(event)">Login</button>
+      </form>
+      <div class="toggle-link">
+        <p>Don't have an account? <a href="javascript:void(0)" onclick="toggleForm('register')">Register here</a></p>
+      </div>
+    </div>
+
+    <!-- Register Form -->
+    <div id="register-form" class="form-container">
+      <form>
+        <select id="register-type" class="required" onchange="toggleTypeFields()" required>
+          <option value="">Select your type</option>
+          <option value="farmer">Farmer</option>
+          <option value="consumer">Consumer/Retailer</option>
+        </select><br>
+
+        <label for="register-name" class="required">Name</label><br>
+        <input type="text" id="register-name" placeholder="Enter your name" required><br>
+
+        <label for="register-phone" class="required">Phone Number</label><br>
+        <input type="tel" id="register-phone" placeholder="Enter your phone number" required><br>
+
+        <label for="register-location" class="required">Location</label><br>
+        <input type="text" id="register-location" placeholder="Enter your location" required><br>
+
+        <!-- Additional Fields for Farmer -->
+        <div class="farmer-fields" id="farmer-fields">
+          <label for="farm-location" class="required">Farm Location</label><br>
+          <input type="text" id="farm-location" placeholder="Enter your farm location" required><br>
+
+          <label for="crop-details" class="required">Crop Details</label><br>
+          <input type="text" id="crop-details" placeholder="Enter crop details" required><br>
+        </div>
+
+        <!-- Email (Optional) -->
+        <label for="register-email">Email (Optional)</label><br>
+        <input type="email" id="register-email" placeholder="Enter your email"><br>
+
+        <label for="register-password" class="required">Password</label><br>
+        <input type="password" id="register-password" placeholder="Create a password" required><br>
+
+        <label for="register-confirm-password" class="required">Confirm Password</label><br>
+        <input type="password" id="register-confirm-password" placeholder="Confirm your password" required><br>
+
+        <button type="submit" onclick="handleRegister(event)">Register</button>
+      </form>
+      <div class="toggle-link">
+        <p>Already have an account? <a href="javascript:void(0)" onclick="toggleForm('login')">Login here</a></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Toggle between login and registration forms
+    function toggleForm(form) {
+      if (form === 'login') {
+        document.getElementById('login-form').classList.add('active');
+        document.getElementById('register-form').classList.remove('active');
+      } else {
+        document.getElementById('register-form').classList.add('active');
+        document.getElementById('login-form').classList.remove('active');
+      }
+    }
+
+    // Handle login form submission
+    function handleLogin(event) {
+      event.preventDefault();
+      const phone = document.getElementById('login-phone').value;
+      const password = document.getElementById('login-password').value;
+      
+      // Retrieve user type from local storage (assuming this was saved during registration)
+      const userType = localStorage.getItem('userType');
+      
+      if (!userType) {
+        alert('User type not found. Please register first.');
+        return;
+      }
+      
+      alert('Login successful! Redirecting to the ' + userType + ' Dashboard...');
+      
+      if (userType === 'farmer') {
+        window.location.href = 'file:///D:/miniproject/front.html'; // Redirect to Farmer's dashboard
+      } else {
+        window.location.href = 'file:///D:/miniproject/cust.html'; // Redirect to Consumer's dashboard
+      }
+    }
+
+    // Handle registration form submission
+    function handleRegister(event) {
+      event.preventDefault();
+      const type = document.getElementById('register-type').value;
+      const name = document.getElementById('register-name').value;
+      const phone = document.getElementById('register-phone').value;
+      const location = document.getElementById('register-location').value;
+      const email = document.getElementById('register-email').value; // Optional email
+      const password = document.getElementById('register-password').value;
+      const confirmPassword = document.getElementById('register-confirm-password').value;
+
+      if (password === confirmPassword) {
+        alert('Registration attempt: ' + name + ' - ' + phone + ' - ' + location + ' - ' + email + ' - Type: ' + type);
+        
+        if (type === 'farmer') {
+          const farmLocation = document.getElementById('farm-location').value;
+          const cropDetails = document.getElementById('crop-details').value;
+          alert('Farmer Registration - Farm Location: ' + farmLocation + ', Crop Details: ' + cropDetails);
+        }
+
+        // Save the user type in localStorage
+        localStorage.setItem('userType', type);
+        
+        alert("Registration successful! Redirecting to the Login page...");
+        
+        // Switch to the login form after registration
+        toggleForm('login');
+        
+        // Simulate a redirect to the login page after a small delay
+        setTimeout(() => {
+          alert("Please log in to proceed.");
+        }, 1000); // Delay before showing the login message
+
+      } else {
+        alert('Passwords do not match!');
+      }
+    }
+
+    // Function to toggle fields based on the selected type
+    function toggleTypeFields() {
+      const type = document.getElementById('register-type').value;
+      if (type === 'farmer') {
+        document.getElementById('farmer-fields').style.display = 'block'; // Show farmer fields
+        document.getElementById('register-location').setAttribute('placeholder', 'Enter your farm location');
+      } else {
+        document.getElementById('farmer-fields').style.display = 'none'; // Hide farmer fields
+        document.getElementById('register-location').setAttribute('placeholder', 'Enter your city or retail store location');
+      }
+    }
+  </script>
+
+</body>
+</html>
